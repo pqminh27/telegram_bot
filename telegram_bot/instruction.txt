@@ -1,0 +1,74 @@
+screen -S telegram_bot
+pip3 install -r requirenments.txt
+sudo apt-get install libpq-dev python-dev
+pip3 install psycopg2
+-----------------------------------------
+source venv/bin/activate
+-----------------------------------------
+python3 mybot.py file.json
+python3 listen.py
+-----------------------------------------
+python3 main.py sendall Message
+python3 main.py send user1 user2 ... message
+
+
+Для ubuntu
+1) Установить python3, проверив его обновления командами
+	sudo apt update
+	sudo apt -y upgrade
+  подтвердив установку, если потребуется
+2) Просмотреть версию установленного python выполнив команду
+	python3 -V
+  если версия выше 3.6, то проблем не должно возникнуть
+3) Проверить установлен ли pip, для это выполнить команду
+	pip3 --version
+3*)Если pip не установлен, то устанавливаем командой
+	sudo apt install python3-pip
+4) Скачать проект и разархивировать в выбранную вами папку
+5) Удалить папки venv и pycache проекта, если таковые имеются
+6) Запустить командную строку и выполнить следующие команды
+	sudo apt install virtualenv
+	virtualenv --python=python3 venv
+	source venv/bin/activate
+	pip3 install -r requirenments.txt
+  данные команды установят необходимые зависимости проекта
+  которые позволят запустить его
+7) Проект установлен, пример работы можно прочитать в readme.txt
+  чтобы успешно запустить исходники необходимо заменить main.exe на 
+  python3 main.py. Параметры, передаваемые программе остаются неизменны
+  например:
+-- Запуск бота: python3 main.py start 1143632014:AAFhp3pxu5jjnWfot1VfMKAXeWRnCHhQ9mU file1.json
+
+8) Если работаете с исходниками, то необходимо в функции process файла main.py раскоментить строки 57-62
+	process_name = '/'.join(path).replace('.exe', '.py')
+        proc = subprocess.Popen('python3 {program} "{token}" "{path_to_db}" "{proxy_s}" > outpu.txt &'.
+                                format(program=process_name, token=bot_token, path_to_db=bd_path, proxy_s=proxy_s),
+                                stdout=subprocess.PIPE, shell=True)
+
+  и закоментить 63-72:
+	process_name = process_name[0:-4]
+        L=process_name.split('/')
+        nname = './'+L[-1]
+        L[-1] = nname
+        process_name = '/'.join(L)
+        proc = subprocess.Popen('{program} "{token}" "{path_to_db}" "{proxy_s}" > output.txt &'.
+                                format(program=process_name, token=bot_token, path_to_db=bd_path,
+                                       proxy_s=proxy_s), stdout=subprocess.PIPE, shell=True)
+	
+
+   
+  комментирование в python следующее - 	для комментирования одной строки символ #
+					для блока: '''
+						    content
+						   '''
+
+9) Чтобы собрать проект необходимо установить библиотеку pyinstaller и выполнить следующие команды
+	pip3 install pyinstaller 	- установка библиотеки
+	pyinstaller -F main.py		- компилируем запускальщик в один файл main
+	pyinstaller -F mybot.py		- компилируем бота в один файл mybot
+  файлы сохранятся в папке dist проекта и создадутся новые папки и файлы, которые можно удалить.
+  Перенести main.exe в папку проекта и удалить папку dist
+
+10) Запускальщик готов
+                                                                0      1     2     3     4
+For chatting with bot, enter this line on terminal: python3 mybot.py argv1 argv2 argv3 argv4
